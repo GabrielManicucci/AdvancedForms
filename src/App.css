@@ -25,7 +25,7 @@
 }
 
 .form {
-  margin-top: 44px;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,7 +46,6 @@
   padding: 14px;
   border-radius: 4px;
   border: none;
-  width: 100%;
 }
 
 .button {
@@ -56,23 +55,77 @@
 .submitButton {
   background-color: #10aa18;
   padding: 16px;
-  margin-top: 8px;
   width: 100%;
   border-radius: 10px;
   border: none;
+  cursor: pointer;
 }
 
 .submitButton:hover {
-  background-color: #0d8313;
+  filter: brightness(70%);
+  transition: 180ms;
 }
 
 .errorMessage {
   font-size: 12px;
-  color: #ff4524a9;
+  color: #ff4524d2;
   margin-top: 4px;
 }
 
 .data {
   margin-top: 14px;
   font-size: 12px;
+}
+
+.techsContainer {
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 250px;
+}
+
+.techsContainer button {
+  background-color: rgb(228, 15, 15);
+  border: none;
+  color: rgb(15, 15, 15);
+  font-size: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.techsContainer button:hover {
+  filter: brightness(70%);
+  transition: 180ms;
+}
+
+.techsContainer label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.techFields {
+  display: flex;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.techFields input {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.techInput {
+  width: 70%;
+  margin-right: 4px;
+}
+
+.number {
+  width: 30%;
+  margin-left: 4px;
 }
