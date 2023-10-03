@@ -27,10 +27,10 @@ const schema = z.object({
     .array(
       z.object({
         title: z.string().nonempty("Insira uma tecnologia"),
-        number: z.coerce.number().min(1).max(100)
+        knowledge: z.coerce.number().min(1).max(100)
       })
     )
-    .min(2, "Insira ao menos duas tecnologias")
+    .min(1, "insira pelo menos 1 tecnologia")
 })
 
 type userSchema = z.infer<typeof schema>
@@ -45,17 +45,18 @@ function App() {
     control
   } = useForm<userSchema>({ resolver: zodResolver(schema) })
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: "techs"
   })
 
   function sendData(data: object) {
+    console.log(data)
     setValue(JSON.stringify(data, null, 2))
   }
 
   function addTech() {
-    append({ title: "", number: 0 })
+    append({ title: "", knowledge: 0 })
   }
 
   return (
@@ -97,29 +98,34 @@ function App() {
               </button>
             </label>
 
-            {fields.map((field, index) => (
-              <div className="techFields" key={field.id}>
-                <div className="techInput">
-                  <input type="text" {...register(`techs.${index}.title`)} />
+            {fields.map((field, index) => {
+              return (
+                <div className="techFields" key={field.id}>
+                  <div className="techInput">
+                    <input type="text" {...register(`techs.${index}.title`)} />
 
-                  {errors.techs?.[index]?.title && (
-                    <span className="errorMessage">
-                      {errors.techs?.[index]?.title?.message}
-                    </span>
-                  )}
+                    {errors.techs?.[index]?.title && (
+                      <span className="errorMessage">
+                        {errors.techs?.[index]?.title?.message}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="number">
+                    <input
+                      type="number"
+                      {...register(`techs.${index}.knowledge`)}
+                    />
+
+                    {errors.techs?.[index]?.knowledge && (
+                      <span className="errorMessage">
+                        {errors.techs?.[index]?.knowledge?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
-
-                <div className="number">
-                  <input type="number" {...register(`techs.${index}.number`)} />
-
-                  {errors.techs?.[index]?.number && (
-                    <span className="errorMessage">
-                      {errors.techs?.[index]?.number?.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
+              )
+            })}
 
             {errors.techs && (
               <span className="errorMessage">{errors.techs.message}</span>
