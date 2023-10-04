@@ -130,3 +130,7 @@
   width: 30%;
   margin-left: 4px;
 }
+
+#avatarInput {
+  padding: 0;
+}

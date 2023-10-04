@@ -3,8 +3,17 @@ import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useState } from "react"
+import { supabase } from "./lib/supabase"
 
 const schema = z.object({
+  avatar: z
+    .instanceof(FileList)
+    .transform(list => list.item(0)!)
+    .refine(file => file !== null, "Escolha uma foto")
+    .refine(
+      file => file?.size <= 5 * 1024 * 1024,
+      "O arquivo pode ter no máximo 5Mb"
+    ),
   name: z
     .string()
     .nonempty({ message: "Nome é obrigatório" })
@@ -22,7 +31,7 @@ const schema = z.object({
   senha: z
     .string()
     .nonempty("A senha é obrigatória")
-    .min(5, "A senha deve conter no mínimo 6 caracteres"),
+    .min(6, "A senha deve conter no mínimo 6 caracteres"),
   techs: z
     .array(
       z.object({
@@ -50,8 +59,12 @@ function App() {
     name: "techs"
   })
 
-  function sendData(data: object) {
-    console.log(data)
+  async function sendData(data: userSchema) {
+    console.log(data.avatar)
+    await supabase.storage
+      .from("forms-react")
+      .upload(data.avatar.name, data.avatar)
+
     setValue(JSON.stringify(data, null, 2))
   }
 
@@ -68,6 +81,14 @@ function App() {
         </div>
 
         <form onSubmit={handleSubmit(sendData)} className="form">
+          <div className="field input">
+            <label htmlFor="Avatar">Avatar</label>
+            <input id="avatarInput" type="file" {...register("avatar")} />
+            {errors.avatar && (
+              <span className="errorMessage">{errors.avatar.message}</span>
+            )}
+          </div>
+
           <div className="field">
             <label htmlFor="name">Nome</label>
             <input type="text" id="name" {...register("name")} />
@@ -102,7 +123,11 @@ function App() {
               return (
                 <div className="techFields" key={field.id}>
                   <div className="techInput">
-                    <input type="text" {...register(`techs.${index}.title`)} />
+                    <input
+                      accept="image/*"
+                      type="text"
+                      {...register(`techs.${index}.title`)}
+                    />
 
                     {errors.techs?.[index]?.title && (
                       <span className="errorMessage">
